@@ -1,9 +1,11 @@
 function init(self)
 	msg.post(".", "acquire_input_focus") -- <1>
 	self.vel = vmath.vector3() -- <2>	
+	msg.post("/camera#camerascript", "follow")
 end
 
 function update(self, dt)
+	
 	local pos = go.get_position() -- <3>
 	pos = pos + self.vel * dt -- <4>
 	go.set_position(pos) -- <5>
