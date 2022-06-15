@@ -2,8 +2,12 @@
 local function play_animation(self, animation)
 	if self.current_animation ~= animation then
 		self.current_animation = animation
-		msg.post("#sprite", "play_animation", { id = animation })
+		msg.post("#sprite", "play_animation", { id = animation})
+		-- msg.post("#sprite", "play_animation", { id = animation, playback_rate = anim_fps })
+		-- sprite.play_flipbook("#sprite", animation, {}, {playback_rate = 60})
 	end
+	
+	go.set("#sprite", "playback_rate", self.moverate)
 end
 
 local function set_animation(self)
@@ -20,31 +24,45 @@ local function set_animation(self)
 end
 
 function init(self)
+	self.movespeed = 150
+	self.moverate = 1
+	
 	msg.post(".", "acquire_input_focus") -- <1>
-	self.vel = vmath.vector3() -- <2>	
+	self.vel = vmath.vector3()
 	msg.post("/camera#camerascript", "follow")
 end
 
 function update(self, dt)
 	
 	set_animation(self)
-	local pos = go.get_position() -- <3>
-	pos = pos + self.vel * dt -- <4>
-	go.set_position(pos) -- <5>
+	local pos = go.get_position()
+	pos = pos + self.vel * dt
+	go.set_position(pos)
 
-	self.vel.x = 0 -- <6>
+	self.vel.x = 0
 	self.vel.y = 0
 end
 
 function on_input(self, action_id, action)
-	if action_id == hash("up") then
-		self.vel.y = 150 -- <7>
-	elseif action_id == hash("down") then
-		self.vel.y = -150
-	elseif action_id == hash("left") then
-		self.vel.x = -150 -- <8>
-	elseif action_id == hash("right") then
-		self.vel.x = 150
+
+
+	if action_id == hash("run") then
+		if action.pressed then
+			self.moverate = 2
+		elseif action.released then
+			self.moverate = 1
+		end
 	end
+
+	if action_id == hash("up") then
+		self.vel.y = self.movespeed * self.moverate
+	elseif action_id == hash("down") then
+		self.vel.y = -self.movespeed * self.moverate
+	elseif action_id == hash("left") then
+		self.vel.x = -self.movespeed * self.moverate
+	elseif action_id == hash("right") then
+		self.vel.x = self.movespeed * self.moverate
+	end
+
 end
 
