@@ -1,5 +1,5 @@
 # Make Games With Defold
-This is the code companion to a tutorial found at ![](https://richard-porteous.github.io/2022/05/10/Defold-Editor.html).
+This is the code companion to a tutorial found at https://richard-porteous.github.io/2022/05/10/Defold-Editor.html
 
 Before using **please note** 
 + this repository may be code only due to possible licence conflicts
